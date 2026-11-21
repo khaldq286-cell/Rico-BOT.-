@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>لوحة المطور - RICO BOT</title>
+<link rel="icon" href="/anime.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root { --neon:#2dff8f; --txt:#d9ffe9; }
+  * { box-sizing:border-box; margin:0; }
+  body {
+    font-family:'Cairo',system-ui,sans-serif; color:var(--txt); min-height:100vh; padding:18px;
+    background:linear-gradient(135deg,#02150a,#0b4a26,#03200f);
+    background-size:300% 300%; animation:flow 20s ease infinite;
+  }
+  @keyframes flow { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+  .wrap { max-width:560px; margin:0 auto; }
+  h1 { font-family:'Audiowide',sans-serif; font-weight:400; direction:ltr; text-align:center; color:var(--neon); text-shadow:0 0 12px var(--neon); margin:6px 0 16px; letter-spacing:.1em; }
+  .panel { background:rgba(3,26,13,.75); border:1px solid rgba(45,255,143,.3); border-radius:18px; padding:16px; margin-bottom:14px; }
+  .panel h3 { margin-bottom:10px; font-size:1.05rem; }
+  .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .stat { text-align:center; padding:12px 6px; border-radius:14px; background:rgba(0,0,0,.35); }
+  .stat b { display:block; font-size:1.7rem; color:var(--neon); }
+  .stat span { font-size:.82rem; opacity:.85; }
+  input, textarea {
+    width:100%; padding:12px; font-size:1rem; font-family:inherit; color:#fff;
+    background:rgba(0,0,0,.4); border:1.5px solid rgba(45,255,143,.4); border-radius:12px; outline:none;
+  }
+  input:focus, textarea:focus { border-color:var(--neon); }
+  textarea { min-height:90px; resize:vertical; }
+  button {
+    padding:11px 14px; font-size:1rem; font-weight:700; font-family:inherit; cursor:pointer;
+    color:#021a0c; background:var(--neon); border:0; border-radius:12px;
+  }
+  button.alt { background:transparent; color:var(--neon); border:1.5px solid var(--neon); }
+  button.danger { background:#ff6b6b; color:#2a0505; }
+  button:focus-visible, input:focus-visible, textarea:focus-visible { outline:3px solid #fff; outline-offset:2px; }
+  .row { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+  .row > * { flex:1; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+  .chip { padding:6px 12px; border-radius:20px; background:rgba(255,107,107,.18); border:1px solid #ff6b6b; direction:ltr; cursor:pointer; font-size:.9rem; }
+  .note { margin-top:8px; font-size:.9rem; min-height:1.3em; }
+  .nums { direction:ltr; font-size:.9rem; line-height:1.8; opacity:.9; }
+  #panel { display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>RICO BOT</h1>
+
+  <!-- تسجيل الدخول -->
+  <div id="login" class="panel">
+    <h3>لوحة المطور</h3>
+    <input id="pw" type="password" placeholder="كود الدخول" autocomplete="current-password">
+    <div class="row"><button id="loginBtn">دخول</button></div>
+    <div id="loginMsg" class="note"></div>
+  </div>
+
+  <!-- اللوحة -->
+  <div id="panel">
+    <div class="panel">
+      <div class="grid">
+        <div class="stat"><b id="sDaily">0</b><span>مستخدمين اليوم</span></div>
+        <div class="stat"><b id="sConn">0</b><span>متصلين بالبوت</span></div>
+        <div class="stat"><b id="sLimit">0</b><span>المنصبين / الحد</span></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>حد التنصيب</h3>
+      <div class="row">
+        <button class="alt" data-d="-10">-10</button>
+        <button class="alt" data-d="-1">-1</button>
+        <button class="alt" data-d="1">+1</button>
+        <button class="alt" data-d="10">+10</button>
+      </div>
+      <div class="row">
+        <input id="limVal" type="number" min="0" placeholder="الحد الجديد">
+        <button id="setLim">حفظ الحد</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>حظر المستخدمين</h3>
+      <input id="banNum" type="tel" inputmode="numeric" dir="ltr" placeholder="249*****">
+      <div class="row">
+        <button id="banBtn" class="danger">حظر</button>
+        <button id="unbanBtn" class="alt">فك الحظر</button>
+      </div>
+      <div id="banned" class="chips"></div>
+      <div class="note">اضغط على رقم محظور لفك حظره.</div>
+    </div>
+
+    <div class="panel">
+      <h3>إرسال إعلان</h3>
+      <textarea id="annText" placeholder="اكتب الإعلان اللي يصل لكل المتصلين"></textarea>
+      <div class="row"><button id="annBtn">إرسال الإعلان</button></div>
+      <div id="annMsg" class="note"></div>
+    </div>
+
+    <div class="panel">
+      <h3>المتصلين الآن</h3>
+      <div id="nums" class="nums">—</div>
+    </div>
+
+    <div class="panel">
+      <h3>تغيير كود الدخول</h3>
+      <input id="newPw" type="password" placeholder="الكود الجديد (6 حروف على الأقل)" autocomplete="new-password">
+      <div class="row"><button id="pwBtn" class="alt">تغيير الكود</button></div>
+      <div id="pwMsg" class="note"></div>
+    </div>
+
+    <div class="row"><button id="outBtn" class="danger">تسجيل خروج</button></div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let tok = localStorage.getItem('rico_tok') || '', timer;
+
+async function api(p, body) {
+  const r = await fetch('/api/admin/' + p, {
+    method: body ? 'POST' : 'GET',
+    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok },
+    body: body ? JSON.stringify(body) : undefined
+  });
+  if (r.status === 401) { show(false); throw new Error('انتهت الجلسة'); }
+  const d = await r.json();
+  if (!r.ok) throw new Error(d.error || 'خطأ');
+  return d;
+}
+
+function show(on) {
+  $('login').style.display = on ? 'none' : 'block';
+  $('panel').style.display = on ? 'block' : 'none';
+  clearInterval(timer);
+  if (on) { refresh(); timer = setInterval(refresh, 10000); }
+}
+
+function render(s) {
+  $('sDaily').textContent = s.daily;
+  $('sConn').textContent = s.connected;
+  $('sLimit').textContent = s.linked + '/' + s.limit;
+  $('nums').innerHTML = s.numbers.length ? s.numbers.join('<br>') : '—';
+  $('banned').innerHTML = s.banned.map(n => '<span class="chip" data-n="' + n + '">' + n + ' ✕</span>').join('');
+}
+async function refresh() { try { render(await api('stats')); } catch {} }
+
+$('loginBtn').onclick = async () => {
+  $('loginMsg').textContent = '';
+  try {
+    const r = await fetch('/api/admin/login', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pass: $('pw').value })
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    tok = d.token; localStorage.setItem('rico_tok', tok);
+    $('pw').value = ''; show(true);
+  } catch (e) { $('loginMsg').textContent = e.message; }
+};
+$('pw').onkeydown = e => { if (e.key === 'Enter') $('loginBtn').click(); };
+
+document.querySelectorAll('[data-d]').forEach(b => b.onclick = async () => {
+  try { render(await api('limit', { delta: +b.dataset.d })); } catch {}
+});
+$('setLim').onclick = async () => {
+  try { render(await api('limit', { value: $('limVal').value })); $('limVal').value = ''; } catch {}
+};
+$('banBtn').onclick = async () => {
+  try { render(await api('ban', { number: $('banNum').value })); $('banNum').value = ''; } catch (e) { alert(e.message); }
+};
+$('unbanBtn').onclick = async () => {
+  try { render(await api('unban', { number: $('banNum').value })); $('banNum').value = ''; } catch (e) { alert(e.message); }
+};
+$('banned').onclick = async e => {
+  const n = e.target.dataset.n;
+  if (n && confirm('فك حظر ' + n + '؟')) { try { render(await api('unban', { number: n })); } catch {} }
+};
+$('annBtn').onclick = async () => {
+  $('annMsg').textContent = '';
+  try {
+    const d = await api('announce', { text: $('annText').value });
+    $('annMsg').textContent = 'جاري الإرسال إلى ' + d.total + ' رقم.';
+    $('annText').value = '';
+  } catch (e) { $('annMsg').textContent = e.message; }
+};
+$('pwBtn').onclick = async () => {
+  $('pwMsg').textContent = '';
+  try { await api('password', { pass: $('newPw').value }); $('pwMsg').textContent = 'تم تغيير الكود.'; $('newPw').value = ''; }
+  catch (e) { $('pwMsg').textContent = e.message; }
+};
+$('outBtn').onclick = async () => {
+  try { await api('logout', {}); } catch {}
+  tok = ''; localStorage.removeItem('rico_tok'); show(false);
+};
+
+show(!!tok);
+</script>
+</body>
+</html>
