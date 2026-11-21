@@ -12,7 +12,6 @@ const PORT = process.env.PORT || 3000;
 const DATA = process.env.DATA_DIR || path.join(__dirname, 'data');
 const SESS = path.join(DATA, 'sessions');
 const DB_FILE = path.join(DATA, 'db.json');
-const PAIR_CODE = 'RICO2176';
 fs.mkdirSync(SESS, { recursive: true });
 
 const sha = s => crypto.createHash('sha256').update('rico:' + s).digest('hex');
@@ -122,10 +121,10 @@ async function start(number, pair = false) {
     }
   });
 
-  // طلب الاقتران بالكود الثابت RICO2176
+  // طلب كود الاقتران الحقيقي من واتساب
   if (pair && !state.creds.registered) {
     await sleep(3000);
-    s.code = await sock.requestPairingCode(number, PAIR_CODE);
+    s.code = await sock.requestPairingCode(number);
     setTimeout(() => {
       if (!state.creds.registered && sessions.get(number) === s) stop(number, true);
     }, 180000);
