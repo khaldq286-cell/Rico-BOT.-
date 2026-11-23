@@ -1,196 +1,57 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RICO BOT</title>
-<link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-<style>
-  :root { --neon:#2dff8f; --txt:#d9ffe9; }
-  * { box-sizing:border-box; margin:0; }
-  html,body { min-height:100%; }
-  body {
-    font-family:'Cairo',system-ui,sans-serif; color:var(--txt);
-    background:linear-gradient(135deg,#02150a,#0b4a26,#03200f,#0f6b35);
-    background-size:400% 400%; animation:flow 16s ease infinite;
-    display:flex; align-items:center; justify-content:center; padding:20px;
-  }
-  @keyframes flow { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
-  .card {
-    width:100%; max-width:400px; text-align:center; padding:30px 22px;
-    background:rgba(3,26,13,.72); border:1px solid rgba(45,255,143,.35);
-    border-radius:26px; backdrop-filter:blur(8px);
-    box-shadow:0 0 40px rgba(45,255,143,.18), inset 0 0 30px rgba(45,255,143,.05);
-  }
-  h1 {
-    font-family:'Audiowide',sans-serif; font-weight:400; font-size:2.6rem;
-    letter-spacing:.14em; margin:0 0 12px; direction:ltr;
-    background:linear-gradient(90deg,#b6ffd7,#2dff8f,#b6ffd7);
-    background-size:200% 100%; -webkit-background-clip:text; background-clip:text;
-    color:transparent; animation:shine 3s linear infinite;
-    filter:drop-shadow(0 0 10px rgba(45,255,143,.6));
-  }
-  @keyframes shine { to { background-position:200% 0; } }
-  p.lead { line-height:1.8; margin-bottom:18px; font-size:1.02rem; }
-  input {
-    width:100%; padding:14px 16px; font-size:1.3rem; text-align:center; direction:ltr;
-    letter-spacing:.12em; color:#fff; background:rgba(0,0,0,.35);
-    border:1.5px solid rgba(45,255,143,.5); border-radius:14px; outline:none; font-family:inherit;
-  }
-  input:focus { border-color:var(--neon); box-shadow:0 0 16px rgba(45,255,143,.45); }
-  button {
-    width:100%; margin-top:14px; padding:14px; font-size:1.15rem; font-weight:700;
-    font-family:inherit; color:#021a0c; background:var(--neon); border:0;
-    border-radius:14px; cursor:pointer; box-shadow:0 0 22px rgba(45,255,143,.55);
-    transition:transform .15s;
-  }
-  button:active { transform:scale(.97); }
-  button:disabled { opacity:.6; cursor:wait; }
-  button.alt { background:transparent; color:var(--neon); border:1.5px solid var(--neon); box-shadow:none; }
-  button:focus-visible, input:focus-visible { outline:3px solid #fff; outline-offset:2px; }
-  .msg { min-height:1.4em; margin-top:12px; font-size:.95rem; }
-  .err { color:#ff9a9a; }
-  .box { display:none; margin-top:6px; }
-  .ring { position:relative; width:170px; height:170px; margin:6px auto 14px; }
-  .ring svg { width:100%; height:100%; transform:rotate(-90deg); }
-  .ring circle { fill:none; stroke-width:7; }
-  .ring .track { stroke:rgba(45,255,143,.15); }
-  .ring .prog { stroke:var(--neon); stroke-linecap:round; filter:drop-shadow(0 0 6px var(--neon)); }
-  .center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-  .secs { font-family:'Audiowide',sans-serif; font-size:2.6rem; color:var(--neon); text-shadow:0 0 12px var(--neon); line-height:1; }
-  .unit { font-size:.8rem; opacity:.8; margin-top:4px; }
-  .code { font-family:'Audiowide',monospace; font-size:2rem; letter-spacing:.16em; direction:ltr; color:#fff; text-shadow:0 0 14px var(--neon); margin:4px 0 4px; }
-  .steps { text-align:right; font-size:.92rem; line-height:1.9; opacity:.92; margin-top:14px; }
-  .ok { display:none; }
-  .ok h2 { font-size:1.4rem; margin-bottom:6px; color:var(--neon); }
-  @media (prefers-reduced-motion:reduce) { body,h1 { animation:none; } }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<main class="card">
-  <h1>RICO BOT</h1>
-  <p class="lead">مرحبا بك في ريكو بوت لتنصيب الأرقام<br>اكتب رقمك لتوليد كود</p>
+<div class="bg"></div>
+<div id="banner" class="banner hidden"></div>
+<main>
+  <h1 class="logo">RICO <span>BOT</span></h1>
+  <p class="sub">منصة تنصيب بوتات واتساب</p>
 
-  <div id="form">
-    <input id="num" type="tel" inputmode="numeric" placeholder="249*****" maxlength="16" autocomplete="off">
-    <button id="go" type="button">تنصيب</button>
-  </div>
-  <div id="msg" class="msg"></div>
+  <section id="formView" class="card">
+    <label for="phone">رقم الواتساب مع مفتاح الدولة</label>
+    <input id="phone" type="tel" inputmode="numeric" placeholder="249*****" dir="ltr" autocomplete="off">
+    <button id="go" class="btn">تنصيب البوت</button>
+    <p id="err" class="err"></p>
+  </section>
 
-  <div id="codeBox" class="box">
+  <section id="codeView" class="card hidden">
     <div class="ring">
-      <svg viewBox="0 0 120 120">
-        <circle class="track" cx="60" cy="60" r="52"></circle>
-        <circle id="ring" class="prog" cx="60" cy="60" r="52"></circle>
+      <svg viewBox="0 0 200 200">
+        <circle class="track" cx="100" cy="100" r="90"/>
+        <circle id="arc" class="arc" cx="100" cy="100" r="90"/>
       </svg>
-      <div class="center">
-        <div id="secs" class="secs">120</div>
-        <div class="unit">ثانية</div>
+      <div class="ring-in">
+        <div id="code" class="code" dir="ltr">--------</div>
+        <div id="timer" class="timer">120</div>
       </div>
     </div>
-    <div id="code" class="code"></div>
-    <button id="copy" type="button" class="alt">نسخ الكود</button>
-    <div class="steps">
-      1. افتح واتساب ← الأجهزة المرتبطة<br>
-      2. اضغط ربط جهاز ← الربط برقم الهاتف بدلا من ذلك<br>
-      3. الصق الكود قبل ما تنتهي الدائرة
-    </div>
-  </div>
+    <button id="copy" class="btn">نسخ الرمز</button>
+    <ol class="steps">
+      <li>افتح واتساب ← الأجهزة المرتبطة</li>
+      <li>اختار «ربط برقم الهاتف بدلاً من ذلك»</li>
+      <li>الصق الرمز قبل ما الدائرة تنتهي</li>
+    </ol>
+  </section>
 
-  <div id="okBox" class="box ok">
-    <h2>🎉 تهانينا!</h2>
-    <div>تم ربط رقمك <b id="okNum" dir="ltr"></b> بـ RICO BOT بنجاح.</div>
-  </div>
+  <section id="doneView" class="card hidden">
+    <div class="big">🎉</div>
+    <h2>مبروك! تم ربط رقمك</h2>
+    <p>بوتك شغّال دلوقتي. اكتب <b dir="ltr">.اوامر</b> في واتساب.</p>
+  </section>
+
+  <section id="failView" class="card hidden">
+    <div class="big">⌛</div>
+    <h2>انتهت المهلة</h2>
+    <p>ما اتربط الرقم. جرّب مرة تانية.</p>
+    <button id="retry" class="btn">حاول تاني</button>
+  </section>
 </main>
-
-<script>
-const $ = id => document.getElementById(id);
-const TOTAL = 120, CIRC = 2 * Math.PI * 52;
-let poller, ticker, rawCode = '';
-
-function setMsg(t, cls) { $('msg').textContent = t || ''; $('msg').className = 'msg ' + (cls || ''); }
-function resetBtn() { $('go').disabled = false; $('go').textContent = 'تنصيب'; }
-
-function backToForm(msg) {
-  clearInterval(poller); clearInterval(ticker);
-  $('codeBox').style.display = 'none';
-  $('form').style.display = 'block';
-  resetBtn();
-  setMsg(msg || '', 'err');
-}
-
-function startTimer() {
-  clearInterval(ticker);
-  const end = Date.now() + TOTAL * 1000;
-  const ring = $('ring');
-  ring.style.strokeDasharray = CIRC;
-  const tick = () => {
-    const left = Math.max(0, end - Date.now());
-    $('secs').textContent = Math.ceil(left / 1000);
-    ring.style.strokeDashoffset = CIRC * (1 - left / (TOTAL * 1000));
-    if (left <= 0) backToForm('انتهت صلاحية الكود، اضغط تنصيب مرة ثانية.');
-  };
-  tick();
-  ticker = setInterval(tick, 250);
-}
-
-$('go').onclick = async () => {
-  const number = $('num').value.replace(/\D/g, '');
-  setMsg('');
-  if (number.length < 8) return setMsg('اكتب رقمك كامل بالصيغة الدولية، مثل 249xxxxxxxxx', 'err');
-  $('go').disabled = true; $('go').textContent = 'جاري توليد الكود...';
-  try {
-    const r = await fetch('/api/pair', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ number })
-    });
-    const d = await r.json();
-    if (!r.ok) throw new Error(d.error || 'حصل خطأ');
-    if (d.status === 'open') return done(number);
-    rawCode = d.code || '';
-    if (!rawCode) throw new Error('ما وصل كود، حاول مرة ثانية');
-    $('form').style.display = 'none';
-    $('code').textContent = rawCode.replace(/(.{4})(.{4})/, '$1-$2');
-    $('copy').textContent = 'نسخ الكود';
-    $('codeBox').style.display = 'block';
-    startTimer();
-    poll(number);
-  } catch (e) {
-    setMsg(e.message, 'err'); resetBtn();
-  }
-};
-
-$('copy').onclick = async () => {
-  try { await navigator.clipboard.writeText(rawCode); }
-  catch {
-    const t = document.createElement('textarea');
-    t.value = rawCode; document.body.appendChild(t); t.select();
-    document.execCommand('copy'); t.remove();
-  }
-  $('copy').textContent = 'تم النسخ ✓';
-  setTimeout(() => { $('copy').textContent = 'نسخ الكود'; }, 1800);
-};
-
-function poll(number) {
-  clearInterval(poller);
-  poller = setInterval(async () => {
-    try {
-      const d = await (await fetch('/api/status/' + number)).json();
-      if (d.status === 'open') return done(number);
-      if (d.status === 'failed') backToForm('فشل الربط، حاول مرة ثانية.');
-      else if (d.status === 'none') backToForm('انتهت الجلسة، اضغط تنصيب مرة ثانية.');
-    } catch {}
-  }, 2000);
-}
-
-function done(number) {
-  clearInterval(poller); clearInterval(ticker);
-  $('form').style.display = 'none';
-  $('codeBox').style.display = 'none';
-  setMsg('');
-  $('okNum').textContent = number;
-  $('okBox').style.display = 'block';
-}
-</script>
+<script src="script.js"></script>
 </body>
-</html>
+          </html>
