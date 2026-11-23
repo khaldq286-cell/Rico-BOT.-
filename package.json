@@ -1,13 +1,17 @@
 {
-  "name": "rico-bot",
+  "name": "rico-bot V2",
   "version": "1.0.0",
   "type": "module",
-  "main": "server.js",
-  "scripts": { "start": "node server.js" },
-  "engines": { "node": ">=20" },
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
-    "@whiskeysockets/baileys": "^7.0.0-rc.6",
-    "express": "^4.19.2",
-    "pino": "^9.4.0"
+    "@whiskeysockets/baileys": "^6.7.18",
+    "express": "^4.21.2",
+    "pino": "^9.6.0"
   }
 }
