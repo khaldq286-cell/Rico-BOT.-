@@ -2,56 +2,283 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>RICO BOT</title>
-<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Rakkas&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+@property --a{syntax:'<angle>';initial-value:0deg;inherits:false}
+@property --p{syntax:'<color>';initial-value:#a855f7;inherits:true}
+@property --b{syntax:'<color>';initial-value:#3b82f6;inherits:true}
+@property --c{syntax:'<color>';initial-value:#22d3ee;inherits:true}
+:root{--p:#a855f7;--b:#3b82f6;--c:#22d3ee;--bg:#05020f;--panel:#0d0724;--tx:#f1ecff;--mut:#a79bd0;transition:--p 1.2s ease,--b 1.2s ease,--c 1.2s ease;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+*{box-sizing:border-box;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--tx);font-family:"Cairo","Segoe UI",Tahoma,sans-serif;min-height:100vh;overflow-x:hidden}
+.bg{position:fixed;inset:0;z-index:-1;background:radial-gradient(circle at 15% 15%,color-mix(in srgb,var(--p) 38%,transparent),transparent 45%),radial-gradient(circle at 85% 80%,color-mix(in srgb,var(--b) 38%,transparent),transparent 45%),linear-gradient(135deg,#05020f,#0c0630,#05020f);background-size:200% 200%;animation:flow 14s ease-in-out infinite}
+@keyframes flow{50%{background-position:100% 100%}}
+.waves{position:fixed;left:0;bottom:0;width:200%;height:110px;z-index:-1;pointer-events:none}
+.w1{fill:var(--p);opacity:.35;animation:wv 10s linear infinite}
+.w2{fill:var(--b);opacity:.28;animation:wv 7s linear infinite reverse;transform:translateY(12px)}
+.w3{fill:var(--c);opacity:.22;animation:wv 13s linear infinite;transform:translateY(24px)}
+@keyframes wv{to{transform:translateX(-50%)}}
+.bar{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;position:sticky;top:env(safe-area-inset-top,0px);z-index:10}
+.brand{font-family:"Bungee",cursive;font-size:1.7rem;letter-spacing:2px;color:#fff;text-shadow:0 0 12px var(--p),3px 3px 0 #1e1b4b}
+.brand span{color:var(--c)}
+.dots{width:44px;height:44px;border-radius:12px;border:1px solid color-mix(in srgb,var(--p) 55%,transparent);background:#0d0724cc;color:#fff;font-size:22px;cursor:pointer;box-shadow:0 0 14px color-mix(in srgb,var(--p) 35%,transparent)}
+.menu{position:absolute;left:16px;top:62px;background:#0d0724f2;border:1px solid color-mix(in srgb,var(--p) 55%,transparent);border-radius:14px;padding:6px;min-width:200px;display:none;box-shadow:0 0 26px color-mix(in srgb,var(--b) 40%,transparent)}
+.menu.on{display:block}
+.menu button{display:block;width:100%;text-align:right;background:none;border:0;color:var(--tx);padding:12px 14px;border-radius:10px;font:inherit;cursor:pointer}
+.menu button:hover,.menu button.cur{background:color-mix(in srgb,var(--p) 20%,transparent);color:#fff}
+main{max-width:440px;margin:0 auto;padding:8px 16px 60px;position:relative;z-index:1}
+h1{font-family:"Rakkas","Cairo",sans-serif;font-size:1.7rem;font-weight:400;text-align:center;line-height:1.6;margin:10px 0 18px;text-shadow:0 0 14px var(--p),2px 2px 0 #1e1b4b}
+h1 b{color:var(--c);font-weight:400}
+.zap{position:relative;isolation:isolate;padding:2px;border-radius:18px;background:conic-gradient(from var(--a),transparent 0 62%,var(--p),var(--b),var(--c),transparent 98%);animation:spin 3.2s linear infinite;margin-bottom:16px}
+.zap::after{content:"";position:absolute;inset:0;border-radius:18px;background:inherit;filter:blur(14px);opacity:.75;z-index:-1;animation:flick 2.4s steps(1) infinite}
+@keyframes spin{to{--a:360deg}}
+@keyframes flick{0%,100%{opacity:.75}12%{opacity:.35}18%{opacity:.95}55%{opacity:.5}60%{opacity:.9}}
+.in{background:var(--panel);border-radius:16px;padding:20px;text-align:center}
+.pg{display:none}.pg.on{display:block}
+label{display:block;margin-bottom:10px;color:var(--mut)}
+input,textarea{width:100%;padding:14px;border-radius:12px;border:1px solid color-mix(in srgb,var(--p) 50%,transparent);background:#05020f;color:#fff;font:inherit;font-size:1.15rem;text-align:center;outline:none;letter-spacing:2px}
+textarea{text-align:right;letter-spacing:0;font-size:1rem;min-height:110px}
+input:focus,textarea:focus{box-shadow:0 0 16px color-mix(in srgb,var(--b) 55%,transparent);border-color:var(--b)}
+.btn{margin-top:14px;width:100%;padding:14px;border:0;border-radius:12px;background:linear-gradient(90deg,var(--p),var(--b),var(--c),var(--p));background-size:200% 100%;color:#fff;font:inherit;font-weight:700;font-size:1.05rem;cursor:pointer;transition:transform .15s,box-shadow .2s;animation:slide 5s linear infinite}
+@keyframes slide{to{background-position:200% 0}}
+.btn:active{transform:scale(.96);box-shadow:0 0 30px var(--b)}
+.hid{display:none!important}
+.ring{position:relative;width:220px;height:220px;margin:4px auto 0}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.trk{fill:none;stroke:color-mix(in srgb,var(--p) 25%,transparent);stroke-width:8}
+.arc{fill:none;stroke:url(#g);stroke-width:8;stroke-linecap:round;stroke-dasharray:565.5;filter:drop-shadow(0 0 8px var(--b))}
+.rin{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.code{font-family:"Bungee",monospace;font-size:1.9rem;letter-spacing:3px;text-shadow:0 0 10px var(--c)}
+.note{color:var(--mut);font-size:.85rem;margin-top:6px}
+.steps{text-align:right;margin:14px 20px 0 0;line-height:2;font-size:.92rem}
+.musicbox{display:flex;flex-direction:column;align-items:center;gap:6px;margin:0 0 16px}
+.mwrap{position:relative;width:64px;height:64px}
+.rp{position:absolute;inset:0;border-radius:50%;border:2px solid var(--c);opacity:0;pointer-events:none}
+.playing .rp{animation:rp 2s ease-out infinite}
+.playing .rp.d{animation-delay:1s}
+@keyframes rp{0%{transform:scale(1);opacity:.9}100%{transform:scale(2.3);opacity:0}}
+.mus{position:relative;width:64px;height:64px;border-radius:18px;border:1px solid color-mix(in srgb,var(--c) 60%,transparent);background:linear-gradient(135deg,var(--p),var(--b));color:#fff;font-size:26px;cursor:pointer;box-shadow:0 0 16px color-mix(in srgb,var(--c) 40%,transparent);transition:transform .15s,box-shadow .2s;z-index:1}
+.mus:active{transform:scale(.92);box-shadow:0 0 30px var(--c)}
+.mus-l{font-family:"Rakkas",sans-serif;color:var(--c);font-size:1rem;text-shadow:0 0 8px var(--c)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.f{background:#05020f;border:1px solid color-mix(in srgb,var(--p) 30%,transparent);border-radius:12px;padding:14px 8px;font-size:.9rem}
+.f i{display:block;font-style:normal;font-size:1.6rem;margin-bottom:6px}
+.stars{font-size:2.2rem;direction:ltr;letter-spacing:6px;cursor:pointer;user-select:none}
+.stars span{color:#3a2f66;transition:.15s}.stars span.on{color:#facc15;text-shadow:0 0 12px #facc15}
+.ok{color:#4ade80;margin-top:10px;min-height:1.2em}
+.err{color:#fb7185;margin-top:10px;min-height:1.2em}
+.tl{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;text-align:right}
+.tl button{width:100%;display:flex;align-items:center;gap:12px;background:#05020f;border:1px solid color-mix(in srgb,var(--p) 30%,transparent);color:var(--tx);border-radius:12px;padding:12px;font:inherit;font-size:1rem;cursor:pointer;transition:transform .15s,box-shadow .2s}
+.tl button:active{transform:scale(.97)}
+.tl button.cur{border-color:var(--c);box-shadow:0 0 18px color-mix(in srgb,var(--c) 45%,transparent);color:#fff}
+.num{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--p),var(--b));color:#fff;font-family:"Bungee",sans-serif;flex:0 0 auto}
+.eq{margin-right:auto;display:none;gap:3px;align-items:flex-end;height:18px}
+.tl button.cur .eq{display:flex}
+.eq i{display:block;width:3px;background:var(--c);border-radius:2px;animation:eq .9s ease-in-out infinite}
+.eq i:nth-child(2){animation-delay:.2s}.eq i:nth-child(3){animation-delay:.4s}
+.paused .eq i{animation-play-state:paused}
+@keyframes eq{0%,100%{height:4px}50%{height:18px}}
+.player{margin-top:14px;text-align:center}
+.now{font-family:"Rakkas",sans-serif;font-size:1.15rem;color:var(--c);margin-bottom:10px;min-height:1.4em}
+.prog{width:100%;height:8px;border-radius:8px;background:#ffffff1a;cursor:pointer;position:relative;overflow:hidden}
+.prog>div{height:100%;width:0;background:linear-gradient(90deg,var(--p),var(--c));border-radius:8px}
+.ctl{display:flex;justify-content:center;gap:14px;margin-top:12px;align-items:center}
+.ctl button{width:52px;height:52px;border-radius:50%;border:1px solid color-mix(in srgb,var(--c) 55%,transparent);background:#0d0724;color:#fff;font-size:18px;cursor:pointer;transition:transform .15s,box-shadow .2s}
+.ctl button.big{width:68px;height:68px;font-size:24px;background:linear-gradient(135deg,var(--p),var(--b));box-shadow:0 0 20px var(--c)}
+.ctl button:active{transform:scale(.92)}
+.ttime{font-size:.8rem;color:var(--mut);margin-top:8px;direction:ltr}
+</style>
 </head>
 <body>
 <div class="bg"></div>
-<div id="banner" class="banner hidden"></div>
+<svg class="waves" viewBox="0 0 2880 320" preserveAspectRatio="none" aria-hidden="true">
+  <path class="w1" d="M0 160 Q90 80 180 160 T360 160 T540 160 T720 160 T900 160 T1080 160 T1260 160 T1440 160 T1620 160 T1800 160 T1980 160 T2160 160 T2340 160 T2520 160 T2700 160 T2880 160 L2880 320 L0 320Z"/>
+  <path class="w2" d="M0 170 Q90 90 180 170 T360 170 T540 170 T720 170 T900 170 T1080 170 T1260 170 T1440 170 T1620 170 T1800 170 T1980 170 T2160 170 T2340 170 T2520 170 T2700 170 T2880 170 L2880 320 L0 320Z"/>
+  <path class="w3" d="M0 180 Q90 100 180 180 T360 180 T540 180 T720 180 T900 180 T1080 180 T1260 180 T1440 180 T1620 180 T1800 180 T1980 180 T2160 180 T2340 180 T2520 180 T2700 180 T2880 180 L2880 320 L0 320Z"/>
+</svg>
+<audio id="bgm" preload="none"></audio>
+<header class="bar">
+  <div class="brand">RICO <span>BOT</span></div>
+  <button class="dots" id="dots" aria-label="القائمة">⋮</button>
+  <nav class="menu" id="menu">
+    <button data-p="install" class="cur">⚡ تنصيب</button>
+    <button data-p="music">🎵 الموسيقى</button>
+    <button data-p="home">🏠 الواجهة</button>
+    <button data-p="feat">✨ مميزات RICO BOT</button>
+    <button data-p="rate">⭐ قيّم ريكو</button>
+    <button data-p="sug">💡 أضف اقتراح</button>
+  </nav>
+</header>
 <main>
-  <h1 class="logo">RICO <span>BOT</span></h1>
-  <p class="sub">منصة تنصيب بوتات واتساب</p>
-
-  <section id="formView" class="card">
-    <label for="phone">رقم الواتساب مع مفتاح الدولة</label>
-    <input id="phone" type="tel" inputmode="numeric" placeholder="249*****" dir="ltr" autocomplete="off">
-    <button id="go" class="btn">تنصيب البوت</button>
-    <p id="err" class="err"></p>
-  </section>
-
-  <section id="codeView" class="card hidden">
-    <div class="ring">
-      <svg viewBox="0 0 200 200">
-        <circle class="track" cx="100" cy="100" r="90"/>
-        <circle id="arc" class="arc" cx="100" cy="100" r="90"/>
-      </svg>
-      <div class="ring-in">
-        <div id="code" class="code" dir="ltr">--------</div>
-        <div id="timer" class="timer">120</div>
-      </div>
+  <section class="pg on" id="install">
+    <h1>مرحباً بك في <b>RICO BOT</b><br>لتنصيب الأرقام</h1>
+    <div class="musicbox">
+      <div class="mwrap" id="mbox"><span class="rp"></span><span class="rp d"></span><button class="mus" id="mu" aria-label="الموسيقى">🎵</button></div>
+      <span class="mus-l">موسيقى</span>
     </div>
-    <button id="copy" class="btn">نسخ الرمز</button>
-    <ol class="steps">
-      <li>افتح واتساب ← الأجهزة المرتبطة</li>
-      <li>اختار «ربط برقم الهاتف بدلاً من ذلك»</li>
-      <li>الصق الرمز قبل ما الدائرة تنتهي</li>
-    </ol>
+    <div class="zap"><div class="in">
+      <div id="f1">
+        <label for="ph">ادخل رقمك</label>
+        <input id="ph" type="tel" inputmode="numeric" dir="ltr" placeholder="249××××××××" autocomplete="off">
+        <button class="btn" id="go">تنصيب</button>
+        <p class="err" id="er"></p>
+      </div>
+      <div id="f2" class="hid">
+        <div class="ring">
+          <svg viewBox="0 0 200 200"><defs><linearGradient id="g"><stop offset="0" stop-color="var(--p)"/><stop offset="1" stop-color="var(--c)"/></linearGradient></defs><circle class="trk" cx="100" cy="100" r="90"/><circle class="arc" id="arc" cx="100" cy="100" r="90"/></svg>
+          <div class="rin"><div class="code" id="code" dir="ltr">----</div><div id="tm" class="note">120</div></div>
+        </div>
+        <button class="btn" id="cp">نسخ الكود</button>
+        <ol class="steps"><li>واتساب ← الأجهزة المرتبطة</li><li>ربط برقم الهاتف</li><li>الصق الكود قبل ما الدائرة تخلص</li></ol>
+      </div>
+    </div></div>
   </section>
 
-  <section id="doneView" class="card hidden">
-    <div class="big">🎉</div>
-    <h2>مبروك! تم ربط رقمك</h2>
-    <p>بوتك شغّال دلوقتي. اكتب <b dir="ltr">.اوامر</b> في واتساب.</p>
+  <section class="pg" id="music">
+    <h1>الموسيقى</h1>
+    <div class="zap"><div class="in">
+      <ul class="tl" id="tl"></ul>
+      <div class="player">
+        <div class="now" id="now">اختر أغنية</div>
+        <div class="prog" id="prog"><div id="pbar"></div></div>
+        <div class="ttime" id="ttime">0:00 / 0:00</div>
+        <div class="ctl">
+          <button id="prev" aria-label="السابقة">⏮</button>
+          <button id="play" class="big" aria-label="تشغيل">▶</button>
+          <button id="next" aria-label="التالية">⏭</button>
+        </div>
+      </div>
+    </div></div>
   </section>
 
-  <section id="failView" class="card hidden">
-    <div class="big">⌛</div>
-    <h2>انتهت المهلة</h2>
-    <p>ما اتربط الرقم. جرّب مرة تانية.</p>
-    <button id="retry" class="btn">حاول تاني</button>
+  <section class="pg" id="home">
+    <h1>الواجهة</h1>
+    <div class="zap"><div class="in"><p>منصة بوتات واتساب: كل مستخدم له بوت مستقل، يشتغل ٢٤ ساعة، وتتحكم فيه من هاتفك.</p><button class="btn" data-go="install">ابدأ التنصيب</button></div></div>
+  </section>
+
+  <section class="pg" id="feat">
+    <h1>مميزات <b>RICO BOT</b></h1>
+    <div class="zap"><div class="in"><div class="grid">
+      <div class="f"><i>🔒</i>جلسة مستقلة لكل رقم</div><div class="f"><i>♻️</i>إعادة اتصال تلقائي</div>
+      <div class="f"><i>🎮</i>ألعاب ومنافسات</div><div class="f"><i>🕌</i>قسم إسلامي</div>
+      <div class="f"><i>⬇️</i>تحميل الوسائط</div><div class="f"><i>🤖</i>ذكاء اصطناعي</div>
+      <div class="f"><i>👥</i>إدارة المجموعات</div><div class="f"><i>💬</i>ردود تلقائية</div>
+    </div></div></div>
+  </section>
+
+  <section class="pg" id="rate">
+    <h1>قيّم <b>ريكو</b></h1>
+    <div class="zap"><div class="in"><div class="stars" id="st"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><button class="btn" id="rb">إرسال التقييم</button><p class="ok" id="ro"></p></div></div>
+  </section>
+
+  <section class="pg" id="sug">
+    <h1>أضف <b>اقتراح</b></h1>
+    <div class="zap"><div class="in"><textarea id="tx" maxlength="400" placeholder="اكتب اقتراحك هنا"></textarea><button class="btn" id="sb">إرسال</button><p class="ok" id="so"></p></div></div>
   </section>
 </main>
-<script src="script.js"></script>
-</body>
-          </html>
+<script>
+const $=id=>document.getElementById(id);
+const DEF={p:'#a855f7',b:'#3b82f6',c:'#22d3ee'};
+const TRACKS=[
+ {name:'اغنية رقم 1',src:'music/t1.mp3',th:{p:'#f43f5e',b:'#fb923c',c:'#fecdd3'}},
+ {name:'اغنية رقم 2',src:'music/t2.mp3',th:{p:'#3b82f6',b:'#22d3ee',c:'#a5f3fc'}},
+ {name:'اغنية رقم 3',src:'music/t3.mp3',th:{p:'#f59e0b',b:'#b45309',c:'#fde68a'}},
+ {name:'اغنية رقم 4',src:'music/t4.mp3',th:{p:'#facc15',b:'#84cc16',c:'#fef08a'}},
+ {name:'اغنية رقم 5',src:'music/t5.mp3',th:{p:'#e2e8f0',b:'#94a3b8',c:'#ffffff'}},
+ {name:'اغنية رقم 6',src:'music/t6.mp3',th:{p:'#22c55e',b:'#f8fafc',c:'#bbf7d0'}},
+ {name:'اغنية رقم 7',src:'music/t7.mp3',th:{p:'#7dd3fc',b:'#c4b5fd',c:'#f1f5f9'}}
+];
+const bgm=$('bgm'); bgm.volume=0.7;
+let cur=-1;
+
+function theme(th){const r=document.documentElement.style;r.setProperty('--p',th.p);r.setProperty('--b',th.b);r.setProperty('--c',th.c)}
+function fmt(s){if(!isFinite(s))return '0:00';const m=Math.floor(s/60),x=Math.floor(s%60);return m+':'+(x<10?'0':'')+x}
+
+TRACKS.forEach((t,i)=>{
+  const li=document.createElement('li');
+  li.innerHTML=`<button data-i="${i}"><span class="num">${i+1}</span><span>${t.name}</span><span class="eq"><i></i><i></i><i></i></span></button>`;
+  li.querySelector('button').onclick=()=>playAt(i);
+  $('tl').appendChild(li);
+});
+
+function refreshUI(){
+  const playing=!bgm.paused&&cur>-1;
+  document.querySelectorAll('#tl button').forEach(b=>b.classList.toggle('cur',+b.dataset.i===cur));
+  document.querySelectorAll('.eq i').forEach(e=>e.style.animationPlayState=playing?'running':'paused');
+  $('play').textContent=playing?'⏸':'▶';
+  $('mbox').classList.toggle('playing',playing);
+  $('mu').textContent=playing?'⏸':'🎵';
+  $('now').textContent=cur>-1?TRACKS[cur].name:'اختر أغنية';
+}
+
+function playAt(i){
+  if(i<0)i=TRACKS.length-1; if(i>=TRACKS.length)i=0;
+  if(i===cur){ bgm.paused?bgm.play().catch(()=>{}):bgm.pause(); }
+  else{
+    cur=i; bgm.src=TRACKS[i].src; bgm.load(); theme(TRACKS[i].th);
+    bgm.play().catch(()=>{});
+  }
+  refreshUI();
+}
+function pauseAll(){ bgm.pause(); theme(DEF); refreshUI(); }
+
+bgm.addEventListener('play',()=>{ if(cur>-1) theme(TRACKS[cur].th); refreshUI(); });
+bgm.addEventListener('pause',()=>{ theme(DEF); refreshUI(); });
+bgm.addEventListener('ended',()=>playAt(cur+1));
+bgm.addEventListener('timeupdate',()=>{
+  const d=bgm.duration||0; $('pbar').style.width=(d?bgm.currentTime/d*100:0)+'%';
+  $('ttime').textContent=fmt(bgm.currentTime)+' / '+fmt(d);
+});
+$('prog').onclick=e=>{ if(!bgm.duration)return; const r=e.currentTarget.getBoundingClientRect(); const x=(r.right-e.clientX)/r.width; bgm.currentTime=x*bgm.duration; };
+$('play').onclick=()=>playAt(cur<0?0:cur);
+$('next').onclick=()=>playAt(cur+1);
+$('prev').onclick=()=>playAt(cur-1);
+$('mu').onclick=()=>go('music');
+
+const pages=[...document.querySelectorAll('.pg')];
+function go(p){pages.forEach(x=>x.classList.toggle('on',x.id===p));document.querySelectorAll('#menu button').forEach(b=>b.classList.toggle('cur',b.dataset.p===p));$('menu').classList.remove('on');scrollTo(0,0)}
+$('dots').onclick=e=>{e.stopPropagation();$('menu').classList.toggle('on')};
+document.onclick=()=>$('menu').classList.remove('on');
+document.querySelectorAll('#menu button').forEach(b=>b.onclick=()=>go(b.dataset.p));
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+
+let raf,polling=null;
+$('go').onclick=async()=>{
+  const phone=$('ph').value.replace(/\D/g,'');
+  if(phone.length<8){$('er').textContent='اكتب الرقم مع مفتاح الدولة';return}
+  $('er').textContent='';$('go').disabled=true;$('go').textContent='جاري التنصيب...';
+  if(bgm.paused) playAt(cur<0?0:cur);
+  try{
+    const r=await fetch('/api/pair',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone})});
+    const d=await r.json();
+    if(!d.ok) throw new Error(d.error||'حصل خطأ');
+    $('code').textContent=d.code.replace(/(.{4})(.{4})/,'$1-$2');
+    $('f1').classList.add('hid');$('f2').classList.remove('hid');
+    count(d.expiresIn||120);
+    clearInterval(polling);
+    polling=setInterval(async()=>{
+      try{
+        const s=await (await fetch('/api/status/'+phone)).json();
+        if(s.status==='متصل'){clearInterval(polling);cancelAnimationFrame(raf);$('f2').innerHTML='<div style="font-size:3rem">🎉</div><h2 style="font-family:Rakkas">مبروك! تم ربط رقمك</h2><p>اكتب .اوامر في واتساب</p>';}
+      }catch{}
+    },3000);
+  }catch(e){
+    $('er').textContent=e.message;
+  }finally{
+    $('go').disabled=false;$('go').textContent='تنصيب';
+  }
+};
+function count(s){
+  const t0=performance.now(),a=$('arc');cancelAnimationFrame(raf);
+  (function k(now){
+    const l=Math.max(0,s-(now-t0)/1000);
+    a.style.strokeDashoffset=565.5*(1-l/s);
+    $('tm').textContent=Math.ceil(l);
+    if(l>0)raf=requestAnimationFrame(k);
+    else{clearInterval(polling);pauseAll();$('f2').classList.add('hid');$('f1').classList.remove('hid')}
+  })(t0);
+}
+$('cp').onclick=async()=>{const raw=$('code').textContent.replace('-','');try{await navigator.clipboard.writeText(raw)}catch{}$('cp').textContent='✓ تم النسخ';s
